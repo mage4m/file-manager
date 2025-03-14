@@ -1,0 +1,694 @@
+/**
+ * Simple File Manager Styles
+ */
+
+/* General styles */
+.simple-file-manager {
+    display: flex;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 600px;
+    background-color: #fff;
+}
+
+/* Sidebar */
+.simple-sidebar {
+    width: 220px;
+    background-color: #f8f8f8;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px 0;
+}
+
+.simple-user-info {
+    padding: 0 20px 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.simple-user-info h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.simple-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.simple-actions a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.simple-actions a:hover {
+    color: #333;
+    text-decoration: underline;
+}
+
+.simple-add-item {
+    padding: 5px 20px;
+    margin-bottom: 10px;
+}
+
+.simple-add-item a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+}
+
+.simple-add-item a:hover {
+    color: #333;
+}
+
+/* Search box styles */
+.simple-search-box {
+    padding: 5px 20px 15px;
+    margin-bottom: 10px;
+}
+
+.simple-search-box input,
+.simple-file-search input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.simple-folder-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px;
+}
+
+.simple-folder-list li {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.simple-folder-list a {
+    display: block;
+    padding: 8px 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    flex: 1;
+}
+
+.simple-folder-list a:hover {
+    background-color: #f0f0f0;
+}
+
+.simple-folder-list a.active {
+    background-color: #e6e6e6;
+    font-weight: 500;
+}
+
+.simple-folder-actions {
+    padding-right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.simple-folder-rename {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.simple-folder-rename:hover {
+    opacity: 1;
+}
+
+.simple-folder-list li:hover .simple-folder-actions {
+    visibility: visible;
+}
+
+.simple-folder-actions {
+    visibility: hidden;
+}
+
+/* Content area */
+.simple-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+}
+
+.simple-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.simple-actions-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.simple-file-search {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.simple-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.simple-view-options {
+    display: flex;
+    gap: 10px;
+}
+
+.simple-view-options button {
+    background: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.simple-view-options button:hover {
+    background-color: #f0f0f0;
+}
+
+/* File area */
+.simple-file-area {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.simple-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.simple-empty-state h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.simple-empty-state p {
+    margin: 0 0 30px;
+    color: #666;
+    font-size: 14px;
+}
+
+.simple-upload-options,
+.simple-additional-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.simple-button {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.simple-button:hover {
+    background-color: #f5f5f5;
+}
+
+.simple-help-section {
+    margin-top: 40px;
+    color: #666;
+}
+
+.simple-help-section p {
+    margin-bottom: 10px;
+}
+
+.simple-tutorial-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #666;
+    text-decoration: none;
+}
+
+.simple-tutorial-link:hover {
+    color: #333;
+    text-decoration: underline;
+}
+
+/* Files container */
+.simple-files-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.simple-file-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+
+.simple-file-item:hover {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.simple-file-preview {
+    height: 120px;
+    background-color: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.simple-file-preview img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.simple-file-icon {
+    font-size: 36px;
+}
+
+.simple-file-info {
+    padding: 10px;
+}
+
+.simple-file-name {
+    font-size: 14px;
+    margin: 0 0 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.simple-file-size {
+    font-size: 12px;
+    color: #666;
+}
+
+.simple-file-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 10px 10px;
+    gap: 10px;
+}
+
+.simple-file-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+}
+
+.simple-file-rename {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.simple-file-rename:hover {
+    opacity: 1;
+}
+
+/* List view */
+.simple-files-container.list-view {
+    display: block;
+}
+
+.simple-files-container.list-view .simple-file-item {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.simple-files-container.list-view .simple-file-preview {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.simple-files-container.list-view .simple-file-info {
+    flex: 1;
+}
+
+.simple-files-container.list-view .simple-file-actions {
+    padding: 0 15px;
+}
+
+/* Navigation */
+.simple-navigation {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.simple-navigation a {
+    display: block;
+    color: #666;
+    text-decoration: none;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.simple-navigation a:hover {
+    background-color: #f5f5f5;
+}
+
+/* Modals */
+.simple-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.simple-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.simple-close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.simple-modal h3 {
+    margin: 0 0 20px;
+    font-size: 18px;
+}
+
+.simple-modal input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Footer */
+.simple-powered-by {
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    color: #999;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Drag and drop upload zone */
+.simple-drag-area {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+}
+
+.simple-drag-area.drag-over {
+    background-color: #e9f7fe;
+    border-color: #2196F3;
+}
+
+.simple-drag-area p {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+}
+
+.simple-drag-area .drag-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #999;
+}
+
+/* File preview modal */
+.simple-preview-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow: auto;
+}
+
+.simple-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.simple-preview-header h3 {
+    margin: 0;
+}
+
+.simple-preview-container {
+    text-align: center;
+}
+
+.simple-preview-container img {
+    max-width: 100%;
+    max-height: 60vh;
+}
+
+.simple-preview-container audio,
+.simple-preview-container video {
+    width: 100%;
+    max-height: 60vh;
+}
+
+.simple-preview-text {
+    max-height: 60vh;
+    overflow: auto;
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    text-align: left;
+    white-space: pre-wrap;
+    font-family: monospace;
+}
+
+.simple-preview-pdf {
+    width: 100%;
+    height: 60vh;
+}
+
+.simple-preview-details {
+    margin-top: 15px;
+    text-align: left;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.simple-unsupported-preview {
+    padding: 30px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.simple-unsupported-preview p {
+    margin: 0 0 15px;
+}
+
+/* Persistent upload area */
+.simple-persistent-upload {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.simple-persistent-upload-title {
+    font-weight: 500;
+    margin: 0;
+}
+
+.simple-persistent-upload-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.simple-drag-area .drag-supported-types {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Full folder area drag and drop */
+.simple-file-area {
+    position: relative;
+}
+
+.simple-drop-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(33, 150, 243, 0.2);
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.simple-drop-message {
+    background-color: white;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.simple-drop-message span {
+    font-size: 24px;
+}
+
+/* Folder options menu */
+.simple-folder-options {
+    position: relative;
+    display: inline-block;
+}
+
+.simple-folder-options-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 14px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.simple-folder-options-button:hover {
+    opacity: 1;
+}
+
+.simple-folder-options-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    min-width: 150px;
+    z-index: 100;
+    display: none;
+}
+
+.simple-folder-options-menu.active {
+    display: block;
+}
+
+.simple-folder-options-menu a {
+    display: flex !important;
+    align-items: center;
+    padding: 8px 12px !important;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.simple-folder-options-menu a:last-child {
+    border-bottom: none;
+}
+
+.simple-folder-options-menu a:hover {
+    background-color: #f8f8f8;
+}
+
+.simple-folder-options-menu a span {
+    margin-right: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+.simple-folder-options-menu a.delete-option {
+    color: #e53935;
+}
+
+.simple-folder-options-menu a.delete-option span {
+    color: #e53935;
+}
+
