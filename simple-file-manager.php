@@ -11,12 +11,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Simple_File_Manager {
+class Simple_File_Manager
+{
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         // Register shortcode
         add_shortcode('file_manager', array($this, 'render_file_manager'));
 
@@ -35,12 +37,14 @@ class Simple_File_Manager {
         add_action('wp_ajax_simple_search_files', array($this, 'handle_search_files'));
         add_action('wp_ajax_simple_file_preview', array($this, 'handle_file_preview'));
         add_action('wp_ajax_simple_delete_folder', array($this, 'handle_delete_folder'));
+        add_filter('body_class', array($this, 'add_file_manager_body_class'));
     }
 
     /**
      * Register assets
      */
-    public function register_assets() {
+    public function register_assets()
+    {
         wp_register_style('simple-file-manager-css', plugin_dir_url(__FILE__) . 'file-manager-css.css');
         wp_register_script('simple-file-manager-js', plugin_dir_url(__FILE__) . 'file-manager-js.js', array('jquery'), '1.1', true);
 
@@ -53,12 +57,14 @@ class Simple_File_Manager {
     /**
      * Render the file manager
      */
-    public function render_file_manager() {
+    public function render_file_manager()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             return '<p>You must be logged in to use the file manager.</p>';
         }
-
+        global $is_file_manager_shortcode;
+        $is_file_manager_shortcode = true;
         // Enqueue scripts and styles
         wp_enqueue_style('simple-file-manager-css');
         wp_enqueue_script('simple-file-manager-js');
@@ -99,28 +105,35 @@ class Simple_File_Manager {
                 <ul class="simple-folder-list">
                     <?php foreach ($folders as $folder) : ?>
                         <li>
-                            <a href="#" data-folder="<?php echo esc_attr($folder); ?>" class="<?php echo ($folder === 'logos') ? 'active' : ''; ?>">
+                            <a href="#" data-folder="<?php echo esc_attr($folder); ?>"
+                               class="<?php echo ($folder === 'logos') ? 'active' : ''; ?>">
                                 📁 <?php echo esc_html(ucfirst($folder)); ?>
                             </a>
                             <div class="simple-folder-options">
                                 <button class="simple-folder-options-button">⋮</button>
                                 <div class="simple-folder-options-menu">
-                                    <a href="#" class="simple-folder-rename-option" data-folder="<?php echo esc_attr($folder); ?>">
+                                    <a href="#" class="simple-folder-rename-option"
+                                       data-folder="<?php echo esc_attr($folder); ?>">
                                         <span>✏️</span> Rename
                                     </a>
-<!--                                    <a href="#" class="simple-folder-subcollection-option" data-folder="--><?php //echo esc_attr($folder); ?><!--">-->
-<!--                                        <span>➕</span> Add Subcollection-->
-<!--                                    </a>-->
-<!--                                    <a href="#" class="simple-folder-duplicate-option" data-folder="--><?php //echo esc_attr($folder); ?><!--">-->
-<!--                                        <span>📋</span> Duplicate-->
-<!--                                    </a>-->
-<!--                                    <a href="#" class="simple-folder-toggle-option" data-folder="--><?php //echo esc_attr($folder); ?><!--">-->
-<!--                                        <span>👁️</span> Toggle-->
-<!--                                    </a>-->
-<!--                                    <a href="#" class="simple-folder-share-option" data-folder="--><?php //echo esc_attr($folder); ?><!--">-->
-<!--                                        <span>🔗</span> Share-->
-<!--                                    </a>-->
-                                    <a href="#" class="simple-folder-delete-option delete-option" data-folder="<?php echo esc_attr($folder); ?>">
+                                    <!--                                    <a href="#" class="simple-folder-subcollection-option" data-folder="-->
+                                    <?php //echo esc_attr($folder); ?><!--">-->
+                                    <!--                                        <span>➕</span> Add Subcollection-->
+                                    <!--                                    </a>-->
+                                    <!--                                    <a href="#" class="simple-folder-duplicate-option" data-folder="-->
+                                    <?php //echo esc_attr($folder); ?><!--">-->
+                                    <!--                                        <span>📋</span> Duplicate-->
+                                    <!--                                    </a>-->
+                                    <!--                                    <a href="#" class="simple-folder-toggle-option" data-folder="-->
+                                    <?php //echo esc_attr($folder); ?><!--">-->
+                                    <!--                                        <span>👁️</span> Toggle-->
+                                    <!--                                    </a>-->
+                                    <!--                                    <a href="#" class="simple-folder-share-option" data-folder="-->
+                                    <?php //echo esc_attr($folder); ?><!--">-->
+                                    <!--                                        <span>🔗</span> Share-->
+                                    <!--                                    </a>-->
+                                    <a href="#" class="simple-folder-delete-option delete-option"
+                                       data-folder="<?php echo esc_attr($folder); ?>">
                                         <span>🗑️</span> Delete
                                     </a>
                                 </div>
@@ -170,32 +183,32 @@ class Simple_File_Manager {
                             <button id="simple-import-url" class="simple-button">
                                 <span>🔗</span> Import from URL
                             </button>
-<!--                            <button id="simple-styles-generator" class="simple-button">-->
-<!--                                <span>🎨</span> Styles Generator-->
-<!--                            </button>-->
+                            <!--                            <button id="simple-styles-generator" class="simple-button">-->
+                            <!--                                <span>🎨</span> Styles Generator-->
+                            <!--                            </button>-->
                         </div>
 
-<!--                        <div class="simple-additional-options">-->
-<!--                            <button id="simple-add-color-palette" class="simple-button">-->
-<!--                                <span>🎨</span> Add color palette-->
-<!--                            </button>-->
-<!--                            <button id="simple-add-video" class="simple-button">-->
-<!--                                <span>🎬</span> Add a video-->
-<!--                            </button>-->
-<!--                            <button id="simple-add-text-block" class="simple-button">-->
-<!--                                <span>📝</span> Add text block-->
-<!--                            </button>-->
-<!--                            <button id="simple-add-section-title" class="simple-button">-->
-<!--                                <span>T</span> Add section title-->
-<!--                            </button>-->
-<!--                        </div>-->
+                        <!--                        <div class="simple-additional-options">-->
+                        <!--                            <button id="simple-add-color-palette" class="simple-button">-->
+                        <!--                                <span>🎨</span> Add color palette-->
+                        <!--                            </button>-->
+                        <!--                            <button id="simple-add-video" class="simple-button">-->
+                        <!--                                <span>🎬</span> Add a video-->
+                        <!--                            </button>-->
+                        <!--                            <button id="simple-add-text-block" class="simple-button">-->
+                        <!--                                <span>📝</span> Add text block-->
+                        <!--                            </button>-->
+                        <!--                            <button id="simple-add-section-title" class="simple-button">-->
+                        <!--                                <span>T</span> Add section title-->
+                        <!--                            </button>-->
+                        <!--                        </div>-->
 
-<!--                        <div class="simple-help-section">-->
-<!--                            <p>Need some help setting up your brand space?</p>-->
-<!--                            <a href="#" class="simple-tutorial-link">-->
-<!--                                <span>📺</span> Watch this tutorial-->
-<!--                            </a>-->
-<!--                        </div>-->
+                        <!--                        <div class="simple-help-section">-->
+                        <!--                            <p>Need some help setting up your brand space?</p>-->
+                        <!--                            <a href="#" class="simple-tutorial-link">-->
+                        <!--                                <span>📺</span> Watch this tutorial-->
+                        <!--                            </a>-->
+                        <!--                        </div>-->
                     </div>
 
                     <div class="simple-files-container"></div>
@@ -280,7 +293,8 @@ class Simple_File_Manager {
     /**
      * Get folders for a user
      */
-    private function get_folders($username) {
+    private function get_folders($username)
+    {
         $upload_dir = wp_upload_dir();
         $base_dir = $upload_dir['basedir'] . '/user-files/' . $username;
         $custom_folders = array();
@@ -302,9 +316,19 @@ class Simple_File_Manager {
     }
 
     /**
+     * Get folders for a user
+     */
+    public function add_file_manager_body_class($classes)
+    {
+        $classes[] = 'file-manager-active';
+        return $classes;
+    }
+
+    /**
      * Handle file upload
      */
-    public function handle_file_upload() {
+    public function handle_file_upload()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -381,7 +405,8 @@ class Simple_File_Manager {
     /**
      * Handle folder creation
      */
-    public function handle_create_folder() {
+    public function handle_create_folder()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -424,7 +449,8 @@ class Simple_File_Manager {
     /**
      * Handle loading folder contents
      */
-    public function handle_load_folder() {
+    public function handle_load_folder()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -492,7 +518,8 @@ class Simple_File_Manager {
     /**
      * Handle file deletion
      */
-    public function handle_delete_file() {
+    public function handle_delete_file()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -535,7 +562,8 @@ class Simple_File_Manager {
     /**
      * Handle file renaming
      */
-    public function handle_rename_file() {
+    public function handle_rename_file()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -589,7 +617,8 @@ class Simple_File_Manager {
     /**
      * Handle folder renaming
      */
-    public function handle_rename_folder() {
+    public function handle_rename_folder()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -640,7 +669,8 @@ class Simple_File_Manager {
     /**
      * Handle file and folder searching
      */
-    public function handle_search_files() {
+    public function handle_search_files()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -722,7 +752,8 @@ class Simple_File_Manager {
     /**
      * Get file content for preview
      */
-    public function handle_file_preview() {
+    public function handle_file_preview()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -777,7 +808,8 @@ class Simple_File_Manager {
     /**
      * Handle folder deletion
      */
-    public function handle_delete_folder() {
+    public function handle_delete_folder()
+    {
         // Verify nonce
         check_ajax_referer('simple-file-manager-nonce', 'nonce');
 
@@ -818,7 +850,8 @@ class Simple_File_Manager {
     /**
      * Recursively delete a directory
      */
-    private function delete_directory($dir) {
+    private function delete_directory($dir)
+    {
         if (!file_exists($dir)) {
             return true;
         }
@@ -842,13 +875,16 @@ class Simple_File_Manager {
 }
 
 // Initialize the plugin
-function simple_file_manager_init() {
+function simple_file_manager_init()
+{
     new Simple_File_Manager();
 }
+
 add_action('plugins_loaded', 'simple_file_manager_init');
 
 // Setup folders on plugin activation
-function simple_file_manager_activate() {
+function simple_file_manager_activate()
+{
     $upload_dir = wp_upload_dir();
     $base_dir = $upload_dir['basedir'] . '/user-files';
 
@@ -856,4 +892,5 @@ function simple_file_manager_activate() {
         wp_mkdir_p($base_dir);
     }
 }
+
 register_activation_hook(__FILE__, 'simple_file_manager_activate');
