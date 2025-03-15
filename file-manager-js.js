@@ -805,8 +805,16 @@
                             var firstFolder = $('.simple-folder-list a').first().data('folder');
 
                             if (firstFolder) {
-                                // Switch to first folder
-                                $('.simple-folder-list a[data-folder="' + firstFolder + '"]').click();
+                                // Instead of triggering a click, manually update the UI
+                                $('.simple-folder-list a').removeClass('active');
+                                $('.simple-folder-list a[data-folder="' + firstFolder + '"]').addClass('active');
+
+                                // Update current folder
+                                currentFolder = firstFolder;
+                                $('.simple-current-folder').text(currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1));
+
+                                // Load folder contents directly
+                                loadFolder(currentFolder);
                             } else {
                                 // No folders left, reload page
                                 location.reload();
