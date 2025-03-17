@@ -726,9 +726,18 @@
                         var folderHtml = '<li><a href="#" data-folder="' + response.data.folder + '">' +
                             '📁 ' + response.data.folder.charAt(0).toUpperCase() + response.data.folder.slice(1) +
                             '</a>' +
-                            '<div class="simple-folder-actions">' +
-                            '<button class="simple-folder-rename" data-folder="' + response.data.folder + '">✏️</button>' +
-                            '</div></li>';
+                            '<div class="simple-folder-options">' +
+                            '<button class="simple-folder-options-button">⋮</button>' +
+                            '<div class="simple-folder-options-menu">' +
+                            '<a href="#" class="simple-folder-rename-option" data-folder="' + response.data.folder + '">' +
+                            '<span>✏️</span> Rename' +
+                            '</a>' +
+                            '<a href="#" class="simple-folder-delete-option delete-option" data-folder="' + response.data.folder + '">' +
+                            '<span>🗑️</span> Delete' +
+                            '</a>' +
+                            '</div>' +
+                            '</div>' +
+                            '</li>';
 
                         $('.simple-folder-list').append(folderHtml);
 
