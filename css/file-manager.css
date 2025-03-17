@@ -294,7 +294,6 @@
 }
 
 .simple-file-preview {
-  height: 120px;
   background-color: #f8f8f8;
   display: flex;
   align-items: center;
@@ -330,7 +329,7 @@
 
 .simple-file-actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
   padding: 5px 10px 10px;
   gap: 10px;
 }
@@ -702,4 +701,11 @@
 
 .simple-folder-options-menu a.delete-option span {
   color: #e53935;
+}
+
+button.swal2-confirm, button.swal2-cancel {
+  color: #fff;
+}
+button:hover {
+  background-color: transparent;
 }/*# sourceMappingURL=file-manager.css.map */

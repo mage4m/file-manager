@@ -68,6 +68,8 @@ class Simple_File_Manager
         // Enqueue scripts and styles
         wp_enqueue_style('simple-file-manager-css');
         wp_enqueue_script('simple-file-manager-js');
+        wp_enqueue_style('sweet-alert-2-css','https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.0/sweetalert2.min.css',[],'11.16.0','all');
+        wp_enqueue_script('sweet-alert-2', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.0/sweetalert2.min.js',['jquery'], '11.16.0',true);
 
         // Get current user
         $current_user = wp_get_current_user();
