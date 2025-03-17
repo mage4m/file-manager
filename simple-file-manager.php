@@ -45,8 +45,8 @@ class Simple_File_Manager
      */
     public function register_assets()
     {
-        wp_register_style('simple-file-manager-css', plugin_dir_url(__FILE__) . 'file-manager-css.css');
-        wp_register_script('simple-file-manager-js', plugin_dir_url(__FILE__) . 'file-manager-js.js', array('jquery'), '1.1', true);
+        wp_register_style('simple-file-manager-css', plugin_dir_url(__FILE__) . 'css/file-manager.css', [], '1.2', 'all');
+        wp_register_script('simple-file-manager-js', plugin_dir_url(__FILE__) . 'js/file-manager.js', array('jquery'), '1.2', true);
 
         wp_localize_script('simple-file-manager-js', 'simpleFileManagerAjax', array(
             'ajax_url' => admin_url('admin-ajax.php'),

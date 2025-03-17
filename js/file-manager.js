@@ -203,6 +203,9 @@
                     createFolder(folderName);
                     $('#simple-folder-modal').hide();
                     $('#simple-folder-name').val('');
+                    // setTimeout(() => {
+                    //     window.location.reload();
+                    // }, 1000);
                 } else {
                     alert('Please enter a folder name');
                 }
@@ -881,16 +884,18 @@
                     if (response.success) {
                         // Update folder in list
                         var $folderLink = $('.simple-folder-list a[data-folder="' + currentName + '"]');
+                        var $parentFolder = $('.simple-folder-list > li > a[data-folder="' + currentName + '"]');
                         var $folderRename = $('.simple-folder-list .simple-folder-rename[data-folder="' + currentName + '"]');
 
                         $folderLink.data('folder', newName).attr('data-folder', newName);
-                        $folderLink.html('📁 ' + newName.charAt(0).toUpperCase() + newName.slice(1));
+                        // $folderLink.html('📁 ' + newName.charAt(0).toUpperCase() + newName.slice(1));
 
                         $folderRename.data('folder', newName).attr('data-folder', newName);
 
                         // If this was the current folder, update current folder
                         if (currentFolder === currentName) {
                             currentFolder = newName;
+                            $parentFolder.html('📁 ' + newName.charAt(0).toUpperCase() + newName.slice(1));
                             $('.simple-current-folder').text(newName.charAt(0).toUpperCase() + newName.slice(1));
                             loadFolder(currentFolder);
                         }
