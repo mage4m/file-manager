@@ -42,7 +42,7 @@
 
         // Update current folder display
         $(".simple-current-folder").text(
-          currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
+            currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
         );
 
         // Load folder contents
@@ -72,12 +72,12 @@
         // Update active class
         $(".simple-folder-list a").removeClass("active");
         $(
-          '.simple-folder-list a[data-folder="' + currentFolder + '"]'
+            '.simple-folder-list a[data-folder="' + currentFolder + '"]'
         ).addClass("active");
 
         // Update current folder display
         $(".simple-current-folder").text(
-          currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
+            currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
         );
 
         // Update navigation text
@@ -85,12 +85,12 @@
         var nextIndex = (newIndex + 1) % folders.length;
 
         $(".simple-previous").html(
-          "⬅️ Previous<br>" +
+            "⬅️ Previous<br>" +
             folders[prevIndex].charAt(0).toUpperCase() +
             folders[prevIndex].slice(1)
         );
         $(".simple-next").html(
-          "Next ➡️<br>" +
+            "Next ➡️<br>" +
             folders[nextIndex].charAt(0).toUpperCase() +
             folders[nextIndex].slice(1)
         );
@@ -394,8 +394,8 @@
 
         // Close any other open menus
         $(".simple-folder-options-menu")
-          .not($(this).next())
-          .removeClass("active");
+            .not($(this).next())
+            .removeClass("active");
 
         // Toggle menu
         $(this).next(".simple-folder-options-menu").toggleClass("active");
@@ -457,17 +457,17 @@
 
       // Placeholder functions for other options
       $(document).on(
-        "click",
-        ".simple-folder-subcollection-option, .simple-folder-duplicate-option, .simple-folder-toggle-option, .simple-folder-share-option",
-        function (e) {
-          e.preventDefault();
-          e.stopPropagation();
+          "click",
+          ".simple-folder-subcollection-option, .simple-folder-duplicate-option, .simple-folder-toggle-option, .simple-folder-share-option",
+          function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-          // Close menu
-          $(this).closest(".simple-folder-options-menu").removeClass("active");
+            // Close menu
+            $(this).closest(".simple-folder-options-menu").removeClass("active");
 
-          alert("This feature is not implemented yet.");
-        }
+            alert("This feature is not implemented yet.");
+          }
       );
     }
 
@@ -501,59 +501,46 @@
             var fileType = data.type ? data.type.split("/")[0] : "";
             var fileExtension = data.name.split(".").pop().toLowerCase();
 
-            if (fileType === "image") {
+            if (fileType === 'image') {
               // Image preview
-              previewHtml =
-                '<img src="' + data.url + '" alt="' + data.name + '">';
-            } else if (fileType === "audio") {
+              previewHtml = '<img src="' + data.url + '" alt="' + data.name + '">';
+            } else if (fileType === 'audio') {
               // Audio preview
-              previewHtml =
-                '<audio controls><source src="' +
-                data.url +
-                '">Your browser does not support audio playback.</audio>';
-            } else if (fileType === "video") {
+              previewHtml = '<audio controls><source src="' + data.url + '">Your browser does not support audio playback.</audio>';
+            } else if (fileType === 'video') {
               // Video preview
-              previewHtml =
-                '<video controls><source src="' +
-                data.url +
-                '">Your browser does not support video playback.</video>';
-            } else if (fileExtension === "pdf") {
+              previewHtml = '<video controls><source src="' + data.url + '">Your browser does not support video playback.</video>';
+            } else if (fileExtension === 'pdf') {
               // PDF preview (iframe)
-              previewHtml =
-                '<iframe class="simple-preview-pdf" src="' +
-                data.url +
-                '"></iframe>';
+              previewHtml = '<iframe class="simple-preview-pdf" src="' + data.url + '"></iframe>';
             } else if (data.content) {
               // Text preview
-              previewHtml =
-                '<pre class="simple-preview-text">' + data.content + "</pre>";
+              previewHtml = '<pre class="simple-preview-text">' + data.content + '</pre>';
             } else {
               // Unsupported file type
-              previewHtml =
-                '<div class="simple-unsupported-preview">' +
-                "<p>No preview available for this file type.</p>" +
-                '<a href="' +
-                data.url +
-                '" class="simple-button" target="_blank">Download File</a>' +
-                "</div>";
+              previewHtml = '<div class="simple-unsupported-preview">' +
+                  '<p>No preview available for this file type.</p>' +
+                  '<a href="' + data.url + '" class="simple-button" target="_blank">Download File</a>' +
+                  '</div>';
             }
+
 
             $("#simple-preview-container").html(previewHtml);
 
             // Show file details
             var detailsHtml =
-              "<p>Type: " +
-              (data.type || "Unknown") +
-              "</p>" +
-              "<p>Size: " +
-              data.size +
-              "</p>";
+                "<p>Type: " +
+                (data.type || "Unknown") +
+                "</p>" +
+                "<p>Size: " +
+                data.size +
+                "</p>";
 
             $("#simple-preview-details").html(detailsHtml);
           } else {
             $("#simple-preview-title").text("Error");
             $("#simple-preview-container").html(
-              "<p>Error: " + response.data.message + "</p>"
+                "<p>Error: " + response.data.message + "</p>"
             );
           }
         },
@@ -586,13 +573,13 @@
             displayFiles(response.data.files);
           } else {
             $(".simple-files-container").html(
-              "<p>Error: " + response.data.message + "</p>"
+                "<p>Error: " + response.data.message + "</p>"
             );
           }
         },
         error: function () {
           $(".simple-files-container").html(
-            "<p>Error loading folder contents</p>"
+              "<p>Error loading folder contents</p>"
           );
         },
       });
@@ -641,15 +628,15 @@
 
       // Add persistent upload area only when files exist
       var uploadAreaHtml =
-        '<div class="simple-persistent-upload">' +
-        '<h4 class="simple-persistent-upload-title">Upload to this folder</h4>' +
-        '<div class="simple-persistent-upload-actions">' +
-        '<button id="simple-persistent-upload-btn" class="simple-button">' +
-        "<span>⬆️</span> Upload Files</button>" +
-        // '<button id="simple-persistent-import-url" class="simple-button">' +
-        // '<span>🔗</span> Import URL</button>' +
-        "</div>" +
-        "</div>";
+          '<div class="simple-persistent-upload">' +
+          '<h4 class="simple-persistent-upload-title">Upload to this folder</h4>' +
+          '<div class="simple-persistent-upload-actions">' +
+          '<button id="simple-persistent-upload-btn" class="simple-button">' +
+          "<span>⬆️</span> Upload Files</button>" +
+          // '<button id="simple-persistent-import-url" class="simple-button">' +
+          // '<span>🔗</span> Import URL</button>' +
+          "</div>" +
+          "</div>";
 
       $(".simple-files-container").append(uploadAreaHtml);
 
@@ -692,37 +679,22 @@
           previewHtml = '<div class="simple-file-icon">' + icon + "</div>";
         }
 
-        html +=
-          '<div class="simple-file-item">' +
-          '<div class="simple-file-preview">' +
-          previewHtml +
-          "</div>" +
-          '<div class="simple-file-info">' +
-          '<div class="simple-file-name">' +
-          file.name +
-          "</div>" +
-          '<div class="simple-file-size">' +
-          file.size +
-          "</div>" +
-          "</div>" +
-          '<div class="simple-file-actions">' +
-          '<button class="simple-file-action simple-file-preview" data-file="' +
-          file.name +
-          '" data-url="' +
-          file.url +
-          '">👁️</button>' +
-          '<button class="simple-file-action simple-file-rename" data-file="' +
-          file.name +
-          '">✏️</button>' +
-          '<button class="simple-file-action simple-file-download" data-url="' +
-          file.url +
-          '">⬇️</button>' +
-          '<button class="simple-file-action simple-file-delete" data-file="' +
-          file.name +
-          '">🗑️</button>' +
-          "</div>" +
-          "</div>";
+        html += '<div class="simple-file-item">' +
+            '<div class="simple-file-preview">' + previewHtml + '</div>' +
+            '<div class="simple-file-info">' +
+            '<div class="simple-file-name">' + file.name + '</div>' +
+            '<div class="simple-file-size">' + file.size + '</div>' +
+            '</div>' +
+            '<div class="simple-file-actions">' +
+            '<button class="simple-file-action simple-file-preview" data-file="' + file.name + '" data-url="' + file.url + '">👁️</button>' +
+            '<button class="simple-file-action simple-file-rename" data-file="' + file.name + '">✏️</button>' +
+            '<button class="simple-file-action simple-file-download" data-url="' + file.url + '">⬇️</button>' +
+            '<button class="simple-file-action simple-file-delete" data-file="' + file.name + '">🗑️</button>' +
+            '<button class="simple-file-action simple-file-share" data-file="' + file.name + '">🔗</button>' +
+            '</div>' +
+            '</div>';
       });
+
 
       $(".simple-files-container").append(html);
 
@@ -766,7 +738,7 @@
 
             if (response.data.errors && response.data.errors.length > 0) {
               alert(
-                "Some files failed to upload: " +
+                  "Some files failed to upload: " +
                   response.data.errors.join(", ")
               );
             }
@@ -792,7 +764,7 @@
     function importFromUrl(url) {
       // This is a simplified version - would need server-side code to properly fetch and save the file
       alert(
-        "Import from URL functionality would be implemented here. URL: " + url
+          "Import from URL functionality would be implemented here. URL: " + url
       );
     }
 
@@ -815,40 +787,40 @@
           if (response.success) {
             // Add folder to list
             var folderHtml =
-              '<li><a href="#" data-folder="' +
-              response.data.folder +
-              '">' +
-              "📁 " +
-              response.data.folder.charAt(0).toUpperCase() +
-              response.data.folder.slice(1) +
-              "</a>" +
-              '<div class="simple-folder-options">' +
-              '<button class="simple-folder-options-button">⋮</button>' +
-              '<div class="simple-folder-options-menu">' +
-              '<a href="#" class="simple-folder-rename-option" data-folder="' +
-              response.data.folder +
-              '">' +
-              "<span>✏️</span> Rename" +
-              "</a>" +
-              '<a href="#" class="simple-folder-delete-option delete-option" data-folder="' +
-              response.data.folder +
-              '">' +
-              "<span>🗑️</span> Delete" +
-              "</a>" +
-              "</div>" +
-              "</div>" +
-              "</li>";
+                '<li><a href="#" data-folder="' +
+                response.data.folder +
+                '">' +
+                "📁 " +
+                response.data.folder.charAt(0).toUpperCase() +
+                response.data.folder.slice(1) +
+                "</a>" +
+                '<div class="simple-folder-options">' +
+                '<button class="simple-folder-options-button">⋮</button>' +
+                '<div class="simple-folder-options-menu">' +
+                '<a href="#" class="simple-folder-rename-option" data-folder="' +
+                response.data.folder +
+                '">' +
+                "<span>✏️</span> Rename" +
+                "</a>" +
+                '<a href="#" class="simple-folder-delete-option delete-option" data-folder="' +
+                response.data.folder +
+                '">' +
+                "<span>🗑️</span> Delete" +
+                "</a>" +
+                "</div>" +
+                "</div>" +
+                "</li>";
 
             $(".simple-folder-list").append(folderHtml);
 
             // Switch to new folder
             currentFolder = response.data.folder;
             $(".simple-current-folder").text(
-              currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
+                currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
             );
             $(".simple-folder-list a").removeClass("active");
             $(
-              '.simple-folder-list a[data-folder="' + currentFolder + '"]'
+                '.simple-folder-list a[data-folder="' + currentFolder + '"]'
             ).addClass("active");
 
             loadFolder(currentFolder);
@@ -914,27 +886,27 @@
           if (response.success) {
             // Remove folder from list
             $('.simple-folder-list a[data-folder="' + folderName + '"]')
-              .closest("li")
-              .remove();
+                .closest("li")
+                .remove();
 
             // If this was the current folder, switch to another folder
             if (currentFolder === folderName) {
               // Get first available folder
               var firstFolder = $(".simple-folder-list a")
-                .first()
-                .data("folder");
+                  .first()
+                  .data("folder");
 
               if (firstFolder) {
                 // Instead of triggering a click, manually update the UI
                 $(".simple-folder-list a").removeClass("active");
                 $(
-                  '.simple-folder-list a[data-folder="' + firstFolder + '"]'
+                    '.simple-folder-list a[data-folder="' + firstFolder + '"]'
                 ).addClass("active");
 
                 // Update current folder
                 currentFolder = firstFolder;
                 $(".simple-current-folder").text(
-                  currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
+                    currentFolder.charAt(0).toUpperCase() + currentFolder.slice(1)
                 );
 
                 // Load folder contents directly
@@ -1005,13 +977,13 @@
           if (response.success) {
             // Update folder in list
             var $folderLink = $(
-              '.simple-folder-list a[data-folder="' + currentName + '"]'
+                '.simple-folder-list a[data-folder="' + currentName + '"]'
             );
             var $parentFolder = $(
-              '.simple-folder-list > li > a[data-folder="' + currentName + '"]'
+                '.simple-folder-list > li > a[data-folder="' + currentName + '"]'
             );
             var $folderRename = $(
-              '.simple-folder-list .simple-folder-rename[data-folder="' +
+                '.simple-folder-list .simple-folder-rename[data-folder="' +
                 currentName +
                 '"]'
             );
@@ -1025,10 +997,10 @@
             if (currentFolder === currentName) {
               currentFolder = newName;
               $parentFolder.html(
-                "📁 " + newName.charAt(0).toUpperCase() + newName.slice(1)
+                  "📁 " + newName.charAt(0).toUpperCase() + newName.slice(1)
               );
               $(".simple-current-folder").text(
-                newName.charAt(0).toUpperCase() + newName.slice(1)
+                  newName.charAt(0).toUpperCase() + newName.slice(1)
               );
               loadFolder(currentFolder);
             }

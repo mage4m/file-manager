@@ -11,6 +11,39 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+function simple_file_manager_sharing_tables()
+{
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+
+    // Table for storing share links
+    $table_name = $wpdb->prefix . 'simple_file_shares';
+
+    $sql = "CREATE TABLE $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        user_id mediumint(9) NOT NULL,
+        share_token varchar(64) NOT NULL,
+        share_type varchar(20) NOT NULL,
+        target_path varchar(255) NOT NULL,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        expires_at datetime NULL,
+        password varchar(255) NULL,
+        is_active tinyint(1) DEFAULT 1 NOT NULL,
+        PRIMARY KEY  (id),
+        UNIQUE KEY share_token (share_token)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+
+// Register the activation hooks at the top
+register_activation_hook(__FILE__, 'simple_file_manager_activate');
+register_activation_hook(__FILE__, 'simple_file_manager_sharing_tables');
+
+// Then include your sharing file
+require_once(plugin_dir_path(__FILE__) . 'includes/simple-file-manager-sharing.php');
+
 class Simple_File_Manager
 {
 
@@ -48,9 +81,18 @@ class Simple_File_Manager
         wp_register_style('simple-file-manager-css', plugin_dir_url(__FILE__) . 'css/file-manager.css', [], '1.2', 'all');
         wp_register_script('simple-file-manager-js', plugin_dir_url(__FILE__) . 'js/file-manager.js', array('jquery'), '1.2', true);
 
+        // Add sharing assets
+        wp_register_style('simple-file-manager-sharing-css', plugin_dir_url(__FILE__) . 'css/file-manager-sharing.css', [], '1.0', 'all');
+        wp_register_script('simple-file-manager-sharing-js', plugin_dir_url(__FILE__) . 'js/file-manager-sharing.js', array('jquery'), '1.0', true);
         wp_localize_script('simple-file-manager-js', 'simpleFileManagerAjax', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('simple-file-manager-nonce')
+        ));
+
+        wp_localize_script('simple-file-manager-sharing-js', 'simpleFileManagerSharing', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('simple-file-manager-share-nonce'),
+            'site_url' => site_url('/shared/')
         ));
     }
 
@@ -59,30 +101,32 @@ class Simple_File_Manager
      */
     public function render_file_manager()
     {
-        // Check if user is logged in
+// Check if user is logged in
         if (!is_user_logged_in()) {
             return '<p>You must be logged in to use the file manager.</p>';
         }
         global $is_file_manager_shortcode;
         $is_file_manager_shortcode = true;
-        // Enqueue scripts and styles
+// Enqueue scripts and styles
         wp_enqueue_style('simple-file-manager-css');
         wp_enqueue_script('simple-file-manager-js');
-        wp_enqueue_style('sweet-alert-2-css','https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.0/sweetalert2.min.css',[],'11.16.0','all');
-        wp_enqueue_script('sweet-alert-2', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.0/sweetalert2.min.js',['jquery'], '11.16.0',true);
+        wp_enqueue_style('sweet-alert-2-css', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.0/sweetalert2.min.css', [], '11.16.0', 'all');
+        wp_enqueue_script('sweet-alert-2', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.0/sweetalert2.min.js', ['jquery'], '11.16.0', true);
+        wp_enqueue_style('simple-file-manager-sharing-css');
+        wp_enqueue_script('simple-file-manager-sharing-js');
 
-        // Get current user
+// Get current user
         $current_user = wp_get_current_user();
         $username = sanitize_user($current_user->user_login);
 
-        // Setup base directory
+// Setup base directory
         $upload_dir = wp_upload_dir();
         $base_dir = $upload_dir['basedir'] . '/user-files/' . $username;
 
-        // Get folders
+// Get folders
         $folders = $this->get_folders($username);
 
-        // Start output buffer
+// Start output buffer
         ob_start();
         ?>
         <div class="simple-file-manager">
@@ -130,10 +174,10 @@ class Simple_File_Manager
                                     <?php //echo esc_attr($folder); ?><!--">-->
                                     <!--                                        <span>👁️</span> Toggle-->
                                     <!--                                    </a>-->
-                                    <!--                                    <a href="#" class="simple-folder-share-option" data-folder="-->
-                                    <?php //echo esc_attr($folder); ?><!--">-->
-                                    <!--                                        <span>🔗</span> Share-->
-                                    <!--                                    </a>-->
+                                    <a href="#" class="simple-folder-share-option"
+                                       data-folder="<?php echo esc_attr($folder); ?>">
+                                        <span>🔗</span> Share
+                                    </a>
                                     <a href="#" class="simple-folder-delete-option delete-option"
                                        data-folder="<?php echo esc_attr($folder); ?>">
                                         <span>🗑️</span> Delete
@@ -283,6 +327,52 @@ class Simple_File_Manager
                     </div>
                 </div>
             </div>
+
+            <div id="simple-share-modal" class="simple-modal">
+                <div class="simple-modal-content simple-share-modal-content">
+                    <span class="simple-close">&times;</span>
+                    <h3 id="simple-share-title">Share</h3>
+
+                    <div id="simple-share-form">
+                        <input type="hidden" id="simple-share-type" value="folder">
+                        <input type="hidden" id="simple-share-path" value="">
+
+                        <div class="simple-form-group">
+                            <label for="simple-share-expiry">Link expiration:</label>
+                            <select id="simple-share-expiry">
+                                <option value="0">Never expire</option>
+                                <option value="1">1 day</option>
+                                <option value="7">7 days</option>
+                                <option value="30">30 days</option>
+                                <option value="90">90 days</option>
+                            </select>
+                        </div>
+
+                        <div class="simple-form-group">
+                            <label for="simple-share-password">Password (optional):</label>
+                            <input type="password" id="simple-share-password" placeholder="Leave empty for no password">
+                        </div>
+
+                        <div class="simple-form-actions">
+                            <button id="simple-create-share-button" class="simple-button">Create Share Link</button>
+                            <button id="simple-manage-shares-button" class="simple-button">Manage Shares</button>
+                        </div>
+                    </div>
+
+                    <div id="simple-share-result"></div>
+                </div>
+            </div>
+
+            <!-- Shares list modal -->
+            <div id="simple-shares-list-modal" class="simple-modal">
+                <div class="simple-modal-content simple-shares-list-modal-content">
+                    <span class="simple-close">&times;</span>
+                    <h3>Manage Share Links</h3>
+
+                    <div id="simple-shares-list"></div>
+                </div>
+            </div>
+
         </div>
 
         <div class="simple-powered-by">
@@ -571,6 +661,7 @@ class Simple_File_Manager
 
         // Check if user is logged in
         if (!is_user_logged_in()) {
+
             wp_send_json_error(array('message' => 'You must be logged in to rename files.'));
         }
 
@@ -877,9 +968,14 @@ class Simple_File_Manager
 }
 
 // Initialize the plugin
+// Initialize the plugin
 function simple_file_manager_init()
 {
-    new Simple_File_Manager();
+    $instance = new Simple_File_Manager();
+
+    // Initialize sharing and register shortcode
+    $sharing_instance = new Simple_File_Manager_Sharing();
+    add_shortcode('shared_file_manager', array($sharing_instance, 'render_shared_files'));
 }
 
 add_action('plugins_loaded', 'simple_file_manager_init');
@@ -894,5 +990,3 @@ function simple_file_manager_activate()
         wp_mkdir_p($base_dir);
     }
 }
-
-register_activation_hook(__FILE__, 'simple_file_manager_activate');
