@@ -332,7 +332,7 @@
             // Search files
             setTimeout(() => {
                 $("#simple-file-search").val('');
-            }, 2000);
+            }, 1500);
             $("#simple-file-search").on("input", function () {
                 var searchTerm = $(this).val().trim();
 
