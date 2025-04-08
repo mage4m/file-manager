@@ -199,7 +199,7 @@ class Simple_File_Manager
                     <div class="simple-actions-container">
                         <!-- Search box for files -->
                         <div class="simple-file-search">
-                            <input type="text" id="simple-file-search" placeholder="Search files...">
+                            <input type="text" id="simple-file-search" autocomplete="off" placeholder="Search files...">
                         </div>
                         <div class="simple-view-options">
                             <button class="simple-view-grid">🔲</button>
