@@ -330,7 +330,9 @@
          */
         function initSearch() {
             // Search files
-            $("#simple-file-search").val('');
+            setTimeout(() => {
+                $("#simple-file-search").val('');
+            }, 2000);
             $("#simple-file-search").on("input", function () {
                 var searchTerm = $(this).val().trim();
 
