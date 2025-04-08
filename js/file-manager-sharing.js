@@ -83,34 +83,22 @@
             var password = $('#simple-share-password').val();
 
             $.ajax({
-                url: simpleFileManagerSharing.ajax_url,
-                type: 'POST',
-                data: {
+                url: simpleFileManagerSharing.ajax_url, type: 'POST', data: {
                     action: 'simple_create_share',
                     nonce: simpleFileManagerSharing.nonce,
                     share_type: shareType,
                     target_path: targetPath,
                     expiry_days: expiryDays,
                     password: password
-                },
-                beforeSend: function () {
+                }, beforeSend: function () {
                     $('#simple-create-share-button').prop('disabled', true).text('Creating...');
-                },
-                success: function (response) {
+                }, success: function (response) {
                     if (response.success) {
                         // Update shares list
                         loadSharesList();
 
                         // Display share link
-                        $('#simple-share-result').html(
-                            '<div class="simple-share-success">' +
-                            '<p>Share link created successfully!</p>' +
-                            '<div class="simple-share-url-container">' +
-                            '<input type="text" id="simple-share-url" readonly value="' + response.data.share_url + '">' +
-                            '<button id="simple-copy-share-url" class="simple-button">Copy</button>' +
-                            '</div>' +
-                            '</div>'
-                        );
+                        $('#simple-share-result').html('<div class="simple-share-success">' + '<p>Share link created successfully!</p>' + '<div class="simple-share-url-container">' + '<input type="text" id="simple-share-url" readonly value="' + response.data.share_url + '">' + '<button id="simple-copy-share-url" class="simple-button">Copy</button>' + '</div>' + '</div>');
 
                         // Initialize copy button
                         $('#simple-copy-share-url').on('click', function () {
@@ -123,21 +111,11 @@
                             }, 2000);
                         });
                     } else {
-                        $('#simple-share-result').html(
-                            '<div class="simple-share-error">' +
-                            '<p>Error: ' + response.data.message + '</p>' +
-                            '</div>'
-                        );
+                        $('#simple-share-result').html('<div class="simple-share-error">' + '<p>Error: ' + response.data.message + '</p>' + '</div>');
                     }
-                },
-                error: function () {
-                    $('#simple-share-result').html(
-                        '<div class="simple-share-error">' +
-                        '<p>Error creating share link. Please try again.</p>' +
-                        '</div>'
-                    );
-                },
-                complete: function () {
+                }, error: function () {
+                    $('#simple-share-result').html('<div class="simple-share-error">' + '<p>Error creating share link. Please try again.</p>' + '</div>');
+                }, complete: function () {
                     $('#simple-create-share-button').prop('disabled', false).text('Create Share Link');
                 }
             });
@@ -169,21 +147,15 @@
 
             if (confirm('Are you sure you want to delete this share link? This cannot be undone.')) {
                 $.ajax({
-                    url: simpleFileManagerSharing.ajax_url,
-                    type: 'POST',
-                    data: {
-                        action: 'simple_delete_share',
-                        nonce: simpleFileManagerSharing.nonce,
-                        share_id: shareId
-                    },
-                    success: function (response) {
+                    url: simpleFileManagerSharing.ajax_url, type: 'POST', data: {
+                        action: 'simple_delete_share', nonce: simpleFileManagerSharing.nonce, share_id: shareId
+                    }, success: function (response) {
                         if (response.success) {
                             loadSharesList();
                         } else {
                             alert('Error: ' + response.data.message);
                         }
-                    },
-                    error: function () {
+                    }, error: function () {
                         alert('Error deleting share');
                     }
                 });
@@ -223,23 +195,17 @@
      */
     function loadSharesList() {
         $.ajax({
-            url: simpleFileManagerSharing.ajax_url,
-            type: 'POST',
-            data: {
-                action: 'simple_list_shares',
-                nonce: simpleFileManagerSharing.nonce
-            },
-            beforeSend: function () {
+            url: simpleFileManagerSharing.ajax_url, type: 'POST', data: {
+                action: 'simple_list_shares', nonce: simpleFileManagerSharing.nonce
+            }, beforeSend: function () {
                 $('#simple-shares-list').html('<p>Loading shares...</p>');
-            },
-            success: function (response) {
+            }, success: function (response) {
                 if (response.success) {
                     displaySharesList(response.data.shares);
                 } else {
                     $('#simple-shares-list').html('<p>Error: ' + response.data.message + '</p>');
                 }
-            },
-            error: function () {
+            }, error: function () {
                 $('#simple-shares-list').html('<p>Error loading shares</p>');
             }
         });
@@ -254,35 +220,10 @@
             return;
         }
 
-        var html = '<table class="simple-shares-table">' +
-            '<thead>' +
-            '<tr>' +
-            '<th>Type</th>' +
-            '<th>Path</th>' +
-            '<th>Created</th>' +
-            '<th>Expires</th>' +
-            '<th>Password</th>' +
-            '<th>Status</th>' +
-            '<th>Actions</th>' +
-            '</tr>' +
-            '</thead>' +
-            '<tbody>';
+        var html = '<table class="simple-shares-table">' + '<thead>' + '<tr>' + '<th>Type</th>' + '<th>Path</th>' + '<th>Created</th>' + '<th>Expires</th>' + '<th>Password</th>' + '<th>Status</th>' + '<th>Actions</th>' + '</tr>' + '</thead>' + '<tbody>';
 
         $.each(shares, function (index, share) {
-            html += '<tr' + (!share.is_active ? ' class="inactive"' : '') + '>' +
-                '<td>' + (share.type === 'folder' ? '📁' : '📄') + ' ' + share.type + '</td>' +
-                '<td>' + share.path + '</td>' +
-                '<td>' + formatDate(share.created) + '</td>' +
-                '<td>' + (share.expires ? formatDate(share.expires) : 'Never') + '</td>' +
-                '<td>' + (share.has_password ? 'Yes' : 'No') + '</td>' +
-                '<td>' + (share.is_active ? 'Active' : 'Inactive') + '</td>' +
-                '<td class="share-actions">' +
-                '<button class="simple-copy-share" data-url="' + share.url + '">Copy Link</button>' +
-                (share.is_active ?
-                    '<button class="simple-delete-share" data-id="' + share.id + '">Delete</button>' :
-                    '<span class="deleted-label">Deleted</span>') +
-                '</td>' +
-                '</tr>';
+            html += '<tr' + (!share.is_active ? ' class="inactive"' : '') + '>' + '<td>' + (share.type === 'folder' ? '📁' : '📄') + ' ' + share.type + '</td>' + '<td>' + share.path + '</td>' + '<td>' + formatDate(share.created) + '</td>' + '<td>' + (share.expires ? formatDate(share.expires) : 'Never') + '</td>' + '<td>' + (share.has_password ? 'Yes' : 'No') + '</td>' + '<td>' + (share.is_active ? 'Active' : 'Inactive') + '</td>' + '<td class="share-actions">' + '<button class="simple-copy-share" data-url="' + share.url + '">Copy Link</button>' + (share.is_active ? '<button class="simple-delete-share" data-id="' + share.id + '">Delete</button>' : '<span class="deleted-label">Deleted</span>') + '</td>' + '</tr>';
         });
 
         html += '</tbody></table>';
@@ -298,7 +239,7 @@
         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
     }
 
-    $('.file-preview img').on('click', function() {
+    $('.file-preview img').on('click', function () {
         // Get the download URL from the parent file item
         var downloadUrl = $(this).closest('.simple-shared-file-item').find('.file-download').attr('href');
 
@@ -309,17 +250,14 @@
     }).css('cursor', 'pointer');
 
     // Add hover effects to file items
-    $('.simple-shared-file-item, .simple-shared-folder-item').hover(
-        function() {
-            $(this).addClass('item-hover');
-        },
-        function() {
-            $(this).removeClass('item-hover');
-        }
-    );
+    $('.simple-shared-file-item, .simple-shared-folder-item').hover(function () {
+        $(this).addClass('item-hover');
+    }, function () {
+        $(this).removeClass('item-hover');
+    });
 
     // Smooth scrolling for breadcrumb navigation
-    $('.simple-shared-breadcrumb a').on('click', function(e) {
+    $('.simple-shared-breadcrumb a').on('click', function (e) {
         // Don't prevent default as we need the link to work normally
 
         // Get the target element (the shared view container)
@@ -334,7 +272,7 @@
     });
 
     // Make entire folder item clickable
-    $('.simple-shared-folder-item').on('click', function(e) {
+    $('.simple-shared-folder-item').on('click', function (e) {
         // If the click wasn't on the actual link
         if (!$(e.target).is('a') && !$(e.target).is('span')) {
             // Get the link inside this folder item and follow it
@@ -346,14 +284,14 @@
     }).css('cursor', 'pointer');
 
     // Password form enhancements
-    $('.simple-shared-password-form form').on('submit', function() {
+    $('.simple-shared-password-form form').on('submit', function () {
         // Add a loading state to the form
         $(this).addClass('submitting');
         $(this).find('button').text('Verifying...').prop('disabled', true);
     });
 
     // Make file items open the download when clicked on the preview area
-    $('.file-preview').on('click', function() {
+    $('.file-preview').on('click', function () {
         var $downloadLink = $(this).closest('.simple-shared-file-item').find('.file-download');
         if ($downloadLink.length) {
             window.open($downloadLink.attr('href'), '_blank');
