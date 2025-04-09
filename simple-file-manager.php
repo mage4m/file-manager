@@ -71,6 +71,15 @@ class Simple_File_Manager
         add_action('wp_ajax_simple_file_preview', array($this, 'handle_file_preview'));
         add_action('wp_ajax_simple_delete_folder', array($this, 'handle_delete_folder'));
         add_filter('body_class', array($this, 'add_file_manager_body_class'));
+        add_filter( 'upload_mimes', function( $mimes ) {
+            $mimes['ttf']   = 'font/ttf';
+            $mimes['woff']  = 'font/woff';
+            $mimes['woff2'] = 'font/woff2';
+            $mimes['otf']   = 'font/otf';
+            $mimes['eot']   = 'application/vnd.ms-fontobject';
+            return $mimes;
+        });        
+        
     }
 
     /**
