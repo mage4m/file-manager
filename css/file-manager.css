@@ -293,6 +293,10 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+div.simple-file-preview {
+  height: 150px;
+}
+
 .simple-file-preview {
   background-color: #f8f8f8;
   display: flex;
@@ -564,6 +568,11 @@
 
 .simple-unsupported-preview p {
   margin: 0 0 15px;
+}
+
+.simple-unsupported-preview a {
+  text-decoration: none;
+  color: #fff;
 }
 
 /* Persistent upload area */
